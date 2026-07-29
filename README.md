@@ -1,6 +1,6 @@
 # Protoface Conversations Quickstart
 
-This quickstart is the easiest way to preview a Protoface conversation embed in a React app. Simply follow the steps listed below.
+This quickstart is the easiest way to create a Protoface conversation embed with your own custom UI in a React app. Simply follow the steps listed below.
 
 ## About Protoface
 
