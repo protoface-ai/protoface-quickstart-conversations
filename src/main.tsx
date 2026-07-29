@@ -85,6 +85,7 @@ function App() {
   const isStagedLayout = selectedControlLayout === "staged";
   const isExpandableLayout = selectedControlLayout === "expandable";
   const showStagedIntro = isStagedLayout && isPreStart && !stagedIntroAccepted;
+  const useInlineConsentStart = selectedControlLayout === "below" && displayConfig?.consent?.enabled && isPreStart && !showStagedIntro;
 
   useEffect(() => {
     if (conversation.config) {
@@ -181,15 +182,38 @@ function App() {
           </div>
         ) : null}
 
-        {displayConfig?.consent?.enabled && isPreStart && !showStagedIntro && (
+        {!showStagedIntro && displayConfig?.consent?.enabled && isPreStart && !useInlineConsentStart ? (
           <label className="check consentCheck">
             <input checked={consentChecked} type="checkbox" onChange={(event) => setConsentChecked(event.currentTarget.checked)} />
             <span>{acknowledgementText}</span>
           </label>
-        )}
+        ) : null}
 
-        {!showStagedIntro ? (
-          <div className={`buttonRow callActions ${isLive || conversation.status === "waiting_for_avatar" ? "twoActions iconActions" : "oneAction"}`}>
+        {useInlineConsentStart ? (
+          <div className="consentStartRow">
+            <label className="check consentCheck">
+              <input checked={consentChecked} type="checkbox" onChange={(event) => setConsentChecked(event.currentTarget.checked)} />
+              <span>{acknowledgementText}</span>
+            </label>
+            <button
+              aria-label={startLabel}
+              className="iconButton startIconButton"
+              disabled={startRequested || !hasDisplayConfig || !canStart}
+              onClick={startConversation}
+              title={startLabel}
+              type="button"
+            >
+              <Icon name="play" />
+            </button>
+          </div>
+        ) : null}
+
+        {!showStagedIntro && !useInlineConsentStart ? (
+          <div
+            className={`buttonRow callActions ${
+              isLive || conversation.status === "waiting_for_avatar" ? "twoActions iconActions" : "oneAction"
+            }`}
+          >
             {isPreStart ? (
               <button className="button" disabled={startRequested || !hasDisplayConfig || !canStart} onClick={startConversation}>
                 <Icon name="play" />
