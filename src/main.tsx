@@ -9,6 +9,7 @@ const apiBaseUrl = import.meta.env.VITE_PROTOFACE_API_BASE_URL || defaultApiBase
 const cameraConsentText = "Enable camera access to let the assistant see you.";
 
 type ConversationConfig = NonNullable<ReturnType<typeof useProtofaceConversation>["config"]>;
+type ConversationStatus = ReturnType<typeof useProtofaceConversation>["status"];
 type TranscriptLine = {
   id: string;
   role: "agent" | "assistant" | "user";
@@ -36,7 +37,7 @@ function App() {
   const [transcript, setTranscript] = useState<TranscriptLine[]>([]);
   const [selectedControlLayout, setSelectedControlLayout] = useState<ControlLayout>("dock");
   const [stagedIntroAccepted, setStagedIntroAccepted] = useState(false);
-  const advancingRef = useRef(false);
+  const advancingControllerRef = useRef<typeof conversation.conversation | null>(null);
   const displayConfig = conversation.config ?? loadedConfig;
   const hasDisplayConfig = !!displayConfig;
   const avatarName = typeof displayConfig?.avatar_name === "string" ? displayConfig.avatar_name : "our avatar";
@@ -116,12 +117,13 @@ function App() {
   }, [conversation]);
 
   useEffect(() => {
-    if (!startRequested || advancingRef.current) return;
+    if (!startRequested) return;
+    const controller = conversation.conversation;
+    if (advancingControllerRef.current === controller) return;
     let cancelled = false;
 
     async function advanceConversation() {
-      const controller = conversation.conversation;
-      advancingRef.current = true;
+      advancingControllerRef.current = controller;
       try {
         if (controller.state.ended || controller.state.failed) {
           await controller.restart();
@@ -135,9 +137,17 @@ function App() {
         if (!cancelled && controller.state.ready_to_begin) {
           await controller.start();
         }
+      } catch {
+        if (!cancelled) {
+          setStartRequested(false);
+        }
       } finally {
-        advancingRef.current = false;
-        setStartRequested(false);
+        if (advancingControllerRef.current === controller) {
+          advancingControllerRef.current = null;
+        }
+        if (!cancelled && !shouldKeepStartRequestPending(controller.state.status)) {
+          setStartRequested(false);
+        }
       }
     }
 
@@ -145,7 +155,7 @@ function App() {
     return () => {
       cancelled = true;
     };
-  }, [conversation.conversation, startRequested]);
+  }, [conversation.conversation, conversation.status, startRequested]);
 
   function startConversation() {
     setTranscript([]);
@@ -270,7 +280,7 @@ function App() {
 
         <aside className="controls">
           <section className="intro">
-            <h1>Conversations Preview</h1>
+            <h1>Protoface Conversations Quickstart</h1>
             <p>Test this embed exactly as it will appear to users.</p>
           </section>
 
@@ -370,6 +380,18 @@ function Icon({ name }: { name: "arrow" | "play" | "mic" | "micOff" | "phoneOff"
 }
 
 createRoot(document.getElementById("root")!).render(<App />);
+
+function shouldKeepStartRequestPending(status: ConversationStatus): boolean {
+  return (
+    status === "loading" ||
+    status === "device_access_required" ||
+    status === "requesting_device_access" ||
+    status === "consent_required" ||
+    status === "confirming_consent" ||
+    status === "ready_to_begin" ||
+    status === "ended"
+  );
+}
 
 function resolveAssetUrl(path: string, baseUrl: string | undefined): string {
   try {

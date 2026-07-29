@@ -1,4 +1,4 @@
-# Protoface Quickstart for Conversation Embeds
+# Protoface Conversations Quickstart
 
 This quickstart is the easiest way to preview a Protoface conversation embed in a React app. Simply follow the steps listed below.
 
@@ -6,9 +6,9 @@ This quickstart is the easiest way to preview a Protoface conversation embed in 
 
 Protoface adds a real-time avatar to your AI app or agent.
 
-Get a **free** account at [protoface.com](https://protoface.com/?utm_source=github&utm_medium=referral&utm_campaign=github_docs&utm_content=protoface-conversation-test-app).
+Get a **free** account at [protoface.com](https://protoface.com/?utm_source=github&utm_medium=referral&utm_campaign=github_docs&utm_content=protoface-conversations-quickstart).
 
-Read the docs at [docs.protoface.com](https://docs.protoface.com/?utm_source=github&utm_medium=referral&utm_campaign=github_docs&utm_content=protoface-conversation-test-app).
+Read the docs at [docs.protoface.com](https://docs.protoface.com/?utm_source=github&utm_medium=referral&utm_campaign=github_docs&utm_content=protoface-conversations-quickstart).
 
 To see quickstarts for other platforms, visit the [quickstart repo](https://github.com/protoface-ai/protoface-quickstart).
 
@@ -46,9 +46,9 @@ This flow never exposes Protoface API keys, worker tokens, or LiveKit room crede
 
 ## Avatars
 
-Find avatars you like or create your own on [the Protoface dashboard](https://app.protoface.com?utm_source=github&utm_medium=referral&utm_campaign=github_docs&utm_content=protoface-conversation-test-app). Use the dashboard to create or update a conversation embed, then replace the `.env` value for `VITE_PROTOFACE_EMBED_ID`.
+Find avatars you like or create your own on [the Protoface dashboard](https://app.protoface.com?utm_source=github&utm_medium=referral&utm_campaign=github_docs&utm_content=protoface-conversations-quickstart). Use the dashboard to create or update a conversation embed, then replace the `.env` value for `VITE_PROTOFACE_EMBED_ID`.
 
-Alternatively, find the API spec for creating, retrieving, and maintaining avatars at [docs.protoface.com](https://docs.protoface.com/guides/avatars?utm_source=github&utm_medium=referral&utm_campaign=github_docs&utm_content=protoface-conversation-test-app).
+Alternatively, find the API spec for creating, retrieving, and maintaining avatars at [docs.protoface.com](https://docs.protoface.com/guides/avatars?utm_source=github&utm_medium=referral&utm_campaign=github_docs&utm_content=protoface-conversations-quickstart).
 
 ## Protoface: More Quickstarts
 
