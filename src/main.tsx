@@ -137,9 +137,7 @@ function App() {
         }
       } finally {
         advancingRef.current = false;
-        if (!cancelled && (controller.state.waiting_for_avatar || controller.state.live || controller.state.failed)) {
-          setStartRequested(false);
-        }
+        setStartRequested(false);
       }
     }
 
@@ -174,7 +172,7 @@ function App() {
         ) : null}
 
         {displayConfig?.consent?.enabled && isPreStart && !showStagedIntro && (
-          <label className={isExpandableLayout ? "check consentCheck expandableDetail" : "check consentCheck"}>
+          <label className="check consentCheck">
             <input checked={consentChecked} type="checkbox" onChange={(event) => setConsentChecked(event.currentTarget.checked)} />
             <span>{acknowledgementText}</span>
           </label>
